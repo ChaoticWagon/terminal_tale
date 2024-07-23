@@ -1,7 +1,7 @@
 use bevy::prelude::*;
-
+use bevy::text::BreakLineOn;
 use crate::main_ui::components::MainUi;
-use crate::main_ui::styles::{get_title_text_style, IMAGE_STYLE, MAIN_UI_STYLE, TITLE_STYLE};
+use crate::main_ui::styles::{get_title_text_style, INPUT_STYLE, MAIN_UI_STYLE, TITLE_STYLE};
 
 pub fn spawn_main_ui(mut commands: Commands, asset_server: Res<AssetServer>) {
     build_main_ui(&mut commands, &asset_server);
@@ -34,14 +34,34 @@ pub fn build_main_ui(commands: &mut Commands, asset_server: &Res<AssetServer>) -
                     parent.spawn(TextBundle {
                         text: Text {
                             sections: vec![TextSection::new(
-                                "Hello World",
+                                "Terminal stuff here dsnajdnsajk  djksandjksan dn askdla nnd jksla ndjklasn dlns alkjdn kslan djklan dlksa",
                                 get_title_text_style(asset_server),
                             )],
-                            justify: JustifyText::Center,
-                            ..default()
+                            justify: JustifyText::Left,
+                            linebreak_behavior: BreakLineOn::WordBoundary
                         },
                         ..default()
                     });
+                });
+            
+            parent.spawn(NodeBundle{
+                style: INPUT_STYLE,
+                ..default()
+            })
+                .with_children(|parent| {
+                    parent.spawn(
+                        TextBundle {
+                            text: Text {
+                                sections: vec![TextSection::new(
+                                    "root>",
+                                    get_title_text_style(asset_server),
+                                )],
+                                justify: JustifyText::Center,
+                                ..default()
+                            },
+                            ..default()
+                        },
+                    );
                 });
         })
         .id();
