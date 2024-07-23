@@ -1,0 +1,11 @@
+[package]
+name = "terminal_tale"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+leptos = "0.7.0-alpha"
+
+[[bin]]
+name = "terminal_tale"
+path = "src/main.rs"
