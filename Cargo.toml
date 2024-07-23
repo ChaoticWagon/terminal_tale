@@ -4,7 +4,9 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-leptos = "0.7.0-alpha"
+bevy = { version = "0.14.0", features = ["bevy_ui", "webgpu", "default", "dynamic_linking"] }
+wasm-server-runner = "0.6.3"
+bevy-inspector-egui = "0.25.1"
 
 [[bin]]
 name = "terminal_tale"
