@@ -1,7 +1,11 @@
 use bevy::app::App;
 use bevy::prelude::*;
+use bevy_simple_text_input::TextInputPlugin;
+use systems::interactions::terminal_input;
+use systems::layout::spawn_main_ui;
+
 use crate::AppState;
-use systems::layout::*;
+
 mod components;
 mod styles;
 mod systems;
@@ -11,6 +15,8 @@ pub struct MainUiPlugin;
 impl Plugin for MainUiPlugin {
     fn build(&self, app: &mut App) {
         app
-            .add_systems(OnEnter(AppState::Start), spawn_main_ui);
+            .add_plugins(TextInputPlugin)
+            .add_systems(OnEnter(AppState::Start), spawn_main_ui)
+            .add_systems(Update, terminal_input);
     }
 }
