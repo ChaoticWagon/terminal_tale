@@ -3,7 +3,7 @@ use bevy::text::BreakLineOn;
 use bevy_simple_text_input::TextInputBundle;
 
 use crate::main_ui::components::MainUi;
-use crate::main_ui::styles::{FONT_SIZE, get_terminal_font, get_title_text_style, INPUT_STYLE, MAIN_UI_STYLE, TERMINAL_STYLE};
+use crate::main_ui::styles::{FONT_SIZE, get_terminal_font, get_title_text_style, INPUT_STYLE, MAIN_UI_STYLE, TERMINAL_STYLE, USERNAME_STYLE};
 
 pub fn spawn_main_ui(mut commands: Commands, asset_server: Res<AssetServer>) {
     build_main_ui(&mut commands, &asset_server);
@@ -85,22 +85,39 @@ warning: terminal_tale v0.1.0 (/Users/nathanbonano/RustroverProjects/terminal_ta
                     });
                 });
 
-            parent.spawn((NodeBundle {
-                style: INPUT_STYLE,
-                ..default()
-            }, TextInputBundle::default().with_text_style(
-                TextStyle {
-                    font: get_terminal_font(asset_server),
-                    font_size: FONT_SIZE,
+            parent.spawn(
+                NodeBundle {
+                    style: INPUT_STYLE,
                     ..default()
-                }
-            ).with_value(
-                "root> "
-            )));
+                }).with_children(|parent| {
+                parent.spawn(
+                    TextBundle {
+                        text: Text {
+                            sections: vec![
+                                TextSection::new("root>", get_title_text_style(asset_server))
+                            ],
+                            justify: JustifyText::Left,
+                            linebreak_behavior: BreakLineOn::WordBoundary,
+                        },
+                        style: USERNAME_STYLE,
+                        ..default()
+                    });
+
+                parent.spawn((
+                    NodeBundle {
+                        style: INPUT_STYLE,
+                        ..default()
+                    },
+                    TextInputBundle::default().with_text_style(
+                        TextStyle {
+                            font: get_terminal_font(asset_server),
+                            font_size: FONT_SIZE,
+                            ..default()
+                        }
+                    )));
+            });
         })
         .id();
-
-    // in reality there should only be one flexbox in the row, and the text should be expanding from top to bottom
 
     main_ui_entity
 }

@@ -36,6 +36,18 @@ pub const INPUT_STYLE: Style = {
     style
 };
 
+pub const USERNAME_STYLE: Style = {
+    let mut style = Style::DEFAULT;
+    style.flex_direction = FlexDirection::Row;
+    style.justify_content = JustifyContent::Start;
+    style.align_items = AlignItems::FlexStart;
+    style.width = Val::Auto;
+    style.height = Val::Px(50.0);
+    style.row_gap = Val::Px(2.0);
+    style.column_gap = Val::Px(8.0);
+    style
+};
+
 
 
 pub fn get_title_text_style(asset_server: &Res<AssetServer>) -> TextStyle {
