@@ -4,5 +4,5 @@ use bevy::prelude::Component;
 pub struct MainUi {}
 
 #[derive(Component)]
-pub struct TerminalInput {}
+pub struct TerminalText {}
 

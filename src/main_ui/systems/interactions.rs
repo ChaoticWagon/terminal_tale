@@ -1,47 +1,38 @@
-use bevy::input::keyboard::{Key, KeyboardInput};
+use std::ops::Add;
 use bevy::prelude::*;
+use bevy_simple_text_input::TextInputSubmitEvent;
 
-use crate::main_ui::components::MainUi;
+use crate::main_ui::components::TerminalText;
 
 pub fn terminal_input(
-    mut events: EventReader<KeyboardInput>,
-    mut text_query: Query<(&MainUi, &mut Text)>,
+    mut events: EventReader<TextInputSubmitEvent>,
+    mut text_query: Query<
+        &mut Text,
+        With<TerminalText>
+    >,
 ) {
-    if events.is_empty() {
-        return;
-    }
+    for event in events.read() {
+        
+        if event.value.is_empty(){
+            return;
+        }
 
-    for (_, mut text) in &mut text_query {
-        for event in events.read() {
-            if !event.state.is_pressed() {
-                continue;
-            }
-            
-            println!("{:?}", event);
+        // If the textbox already has text copy the Style and use that for the new text section, if not use defaults
 
-            let sec = if let Some(sec) = text.sections.last_mut() { sec } else {
-                text.sections.push(
-                    default()
-                );
-                &mut text.sections[0]
-            };
-
-            match event.key_code {
-                KeyCode::Space => {
-                    sec.value += " ";
+        for mut text in &mut text_query {
+            match text.sections.clone().last_mut() {
+                Some(last) => {
+                    text.sections.push(TextSection {
+                        value: "\n".chars().chain(event.value.clone().chars()).collect(),
+                        style: last.style.clone(),
+                    });
                 }
-                KeyCode::Enter => {
-                    sec.value += "\n";
+                None => {
+                    text.sections.push(TextSection {
+                        value: event.value.clone(),
+                        ..default()
+                    });
                 }
-                KeyCode::Backspace => {
-                    sec.value.pop();
-                }
-                _ => {}
-            }
-
-            if let Key::Character(ref s) = event.logical_key {
-                println!("Logic");
-                sec.value = sec.value.chars().chain(s.chars()).collect();
             }
         }
     }
