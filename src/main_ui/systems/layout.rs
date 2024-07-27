@@ -2,7 +2,7 @@ use bevy::prelude::*;
 use bevy::text::BreakLineOn;
 use bevy_simple_text_input::TextInputBundle;
 
-use crate::main_ui::components::{MainUi, TerminalText};
+use crate::main_ui::components::{MainUi, TerminalText, TerminalUser};
 use crate::main_ui::styles::{FONT_SIZE, get_terminal_font, get_title_text_style, INPUT_STYLE, MAIN_UI_STYLE, TERMINAL_STYLE, USERNAME_STYLE};
 
 pub fn spawn_main_ui(mut commands: Commands, asset_server: Res<AssetServer>) {
@@ -51,7 +51,7 @@ pub fn build_main_ui(commands: &mut Commands, asset_server: &Res<AssetServer>) -
                     style: INPUT_STYLE,
                     ..default()
                 }).with_children(|parent| {
-                parent.spawn(
+                parent.spawn((
                     TextBundle {
                         text: Text {
                             sections: vec![
@@ -62,7 +62,8 @@ pub fn build_main_ui(commands: &mut Commands, asset_server: &Res<AssetServer>) -
                         },
                         style: USERNAME_STYLE,
                         ..default()
-                    });
+                    }, TerminalUser {}
+                ));
 
                 parent.spawn((
                     NodeBundle {
