@@ -4,12 +4,9 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-bevy = { version = "0.14.0", features = ["bevy_ui", "webgpu", "default", "dynamic_linking"] }
+bevy = { version = "0.14.0", features = ["default"] }
 wasm-server-runner = "0.6.3"
-bevy-inspector-egui = "0.25.1"
 bevy_simple_text_input = "0.8.0"
-wasm-bindgen = "0.2.92"
-wasm-pack = "0.13.0"
 
 [[bin]]
 name = "terminal_tale"
