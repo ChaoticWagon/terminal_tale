@@ -1,3 +1,4 @@
+name: "Phase 1: Initial Access"
 commands:
   - command: "cd ~/projects/wannacry"
     messages:
