@@ -69,7 +69,12 @@ impl ScriptDispatch {
             let phase = serde_yaml::from_str::<Phase>(data);
 
 
-            phases.push(phase.unwrap());
+            if let Ok(phase) = phase {
+                phases.push(phase);
+            } else {
+                io::Error::new(io::ErrorKind::InvalidData, "Invalid data in script file");
+            }
+            
         }
 
         Ok(Self {
