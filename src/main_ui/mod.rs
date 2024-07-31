@@ -1,6 +1,7 @@
 use bevy::app::App;
 use bevy::prelude::*;
-use bevy_simple_text_input::{TextInputPlugin, TextInputSystem};
+use bevy_simple_text_input::TextInputPlugin;
+
 use systems::interactions::terminal_input;
 use systems::layout::spawn_main_ui;
 
