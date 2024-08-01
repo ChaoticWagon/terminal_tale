@@ -106,10 +106,10 @@ commands:
     username: "user@~/projects/wannacry/MS17-010"
     messages:
       - message: "Exploiting target 192.168.1.5..."
-        delay: 2.0
+        delay: 0.2
         mode: "print"
       - message: "Exploit successful."
-        delay: 0.5
+        delay: 2.0
         mode: "print"
   - command: "scp encrypt.py ransom_note.txt user@192.168.1.5:/tmp/"
     username: "user@~/projects/wannacry/MS17-010"
