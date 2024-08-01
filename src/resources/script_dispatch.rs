@@ -2,6 +2,7 @@ use std::collections::VecDeque;
 use std::io;
 use std::path::Path;
 use std::time::Duration;
+
 use bevy::prelude::*;
 use serde::{Deserialize, Deserializer};
 
@@ -9,23 +10,23 @@ use serde::{Deserialize, Deserializer};
 pub struct ScriptDispatch {
     pub phases: VecDeque<Phase>,
     pub message_queue: VecDeque<(String, MessageMode, Timer)>,
-    pub current_timer: Timer
+    pub current_timer: Timer,
 }
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Debug, Clone)]
 pub struct Phase {
     pub name: String, // name of the csv file
     #[serde(deserialize_with = "deserialize_command")]
     pub commands: VecDeque<Command>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Debug, Clone)]
 pub struct Command {
     pub command: String,
     pub username: String,
     pub messages: Vec<Message>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Debug, Clone)]
 pub struct Message {
     pub message: String,
     pub delay: f32,
@@ -70,20 +71,18 @@ impl ScriptDispatch {
 
             let data = &std::fs::read_to_string(entry.path())?;
             let phase = serde_yaml::from_str::<Phase>(data);
-
-
+            
             if let Ok(phase) = phase {
                 phases.push_back(phase);
             } else {
                 io::Error::new(io::ErrorKind::InvalidData, "Invalid data in script file");
             }
-            
         }
 
         Ok(Self {
             phases,
             message_queue: VecDeque::new(),
-            current_timer: Timer::new(Duration::from_secs(0), TimerMode::Once)
+            current_timer: Timer::new(Duration::from_secs(0), TimerMode::Once),
         })
     }
 }

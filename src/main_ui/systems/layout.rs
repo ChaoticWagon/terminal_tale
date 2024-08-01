@@ -2,8 +2,8 @@ use bevy::prelude::*;
 use bevy::text::BreakLineOn;
 use bevy_simple_text_input::TextInputBundle;
 
-use crate::main_ui::components::{MainUi, TerminalText, TerminalUser};
-use crate::main_ui::styles::{FONT_SIZE, get_terminal_font, get_title_text_style, INPUT_STYLE, MAIN_UI_STYLE, TERMINAL_STYLE, USERNAME_STYLE};
+use crate::main_ui::components::{MainUi, TerminalPrompt, TerminalText, TerminalUser};
+use crate::main_ui::styles::{FONT_SIZE, get_command_text_style, get_prompt_text_style, get_terminal_font, get_title_text_style, INPUT_STYLE, MAIN_UI_STYLE, PROMPT_STYLE, TERMINAL_STYLE, USERNAME_STYLE};
 
 pub fn spawn_main_ui(mut commands: Commands, asset_server: Res<AssetServer>) {
     build_main_ui(&mut commands, &asset_server);
@@ -77,6 +77,25 @@ pub fn build_main_ui(commands: &mut Commands, asset_server: &Res<AssetServer>) -
                             ..default()
                         }
                     )));
+            });
+            
+            parent.spawn(NodeBundle {
+                style: PROMPT_STYLE,
+                ..default()
+            }).with_children(|parent| {
+                parent.spawn((
+                    TextBundle {
+                        text: Text {
+                            sections: vec![
+                                TextSection::new("Type: ", get_prompt_text_style(asset_server)),
+                                TextSection::new("cd ~/projects/wannacry (Use tab to complete words you started)", get_command_text_style(asset_server)),
+                            ],
+                            justify: JustifyText::Left,
+                            linebreak_behavior: BreakLineOn::WordBoundary,
+                        },
+                        ..default()
+                    }, TerminalPrompt {}
+                ));
             });
         })
         .id();

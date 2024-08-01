@@ -2,18 +2,22 @@ use bevy::input::keyboard::KeyboardInput;
 use bevy::prelude::*;
 use bevy_simple_text_input::{TextInputCursorPos, TextInputCursorTimer, TextInputInactive, TextInputSettings, TextInputSubmitEvent, TextInputValue};
 
-use crate::main_ui::components::{TerminalText, TerminalUser};
+use crate::main_ui::components::{TerminalPrompt, TerminalText, TerminalUser};
 use crate::resources::script_dispatch::{MessageMode, ScriptDispatch};
 
 pub fn terminal_input(
     mut events: EventReader<TextInputSubmitEvent>,
     mut text_query: Query<
         &mut Text,
-        (With<TerminalText>, Without<TerminalUser>)
+        (With<TerminalText>, Without<TerminalUser>, Without<TerminalPrompt>)
     >,
     mut user_query: Query<
         &mut Text,
-        (With<TerminalUser>, Without<TerminalText>)
+        (With<TerminalUser>, Without<TerminalText>, Without<TerminalPrompt>)
+    >,
+    mut prompt_query: Query<
+        &mut Text,
+        (With<TerminalPrompt>, Without<TerminalUser>, Without<TerminalText>)
     >,
     mut scripts: ResMut<ScriptDispatch>,
 ) {
@@ -38,6 +42,17 @@ pub fn terminal_input(
         let Some(last_username) = user_text.sections.last() else { return };
         let last_username = last_username.value.clone();
         let username = expected_command.username.clone();
+        
+        let Some(next_command) = phase.commands.front() else { return };
+        for mut prompt in &mut prompt_query {
+            if let Some(last) = prompt.sections.clone().last_mut() {
+                prompt.sections.pop();
+                prompt.sections.push(TextSection {
+                    value: next_command.command.clone(),
+                    style: last.style.clone(),
+                });
+            }
+        }
 
         // for each message in the command add to the value vec
 

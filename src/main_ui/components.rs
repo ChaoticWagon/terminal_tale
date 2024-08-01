@@ -9,3 +9,6 @@ pub struct TerminalText {}
 #[derive(Component)]
 pub struct TerminalUser {}
 
+#[derive(Component)]
+pub struct TerminalPrompt {}
+
