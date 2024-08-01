@@ -36,8 +36,6 @@ pub fn terminal_input(
             return;
         }
 
-        // pop the command from the phase
-
         let Some(user_text) = user_query.iter().last() else { return };
         let Some(last_username) = user_text.sections.last() else { return };
         let last_username = last_username.value.clone();
@@ -53,8 +51,6 @@ pub fn terminal_input(
                 });
             }
         }
-
-        // for each message in the command add to the value vec
 
         for mut terminal in &mut text_query {
             match terminal.sections.clone().last_mut() {
@@ -73,10 +69,12 @@ pub fn terminal_input(
                     });
 
                     for message in &expected_command.messages {
+                        let mut timer = Timer::from_seconds(message.delay, TimerMode::Once);
+                        timer.pause();
                         scripts.message_queue.push_back((
                             ["\n", &message.message].concat(),
                             message.mode,
-                            Timer::from_seconds(message.delay, TimerMode::Once),
+                            timer,
                         ));
                     }
                 }
@@ -104,7 +102,15 @@ pub fn send_message(
         message.2.tick(time.delta());
     }
 
-    let Some(front) = script_dispatch.message_queue.pop_front() else { return };
+    let Some(mut front) = script_dispatch.message_queue.pop_front() else { return };
+    
+    if front.2.paused() {
+        front.2.unpause();
+        front.2.reset();
+        front.2.tick(time.delta());
+    }
+    
+    
 
     if front.2.finished() {
         for mut terminal in &mut text_query {

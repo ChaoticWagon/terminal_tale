@@ -32,7 +32,7 @@ pub const INPUT_STYLE: Style = {
     style.justify_content = JustifyContent::Start;
     style.align_items = AlignItems::FlexStart;
     style.width = Val::Auto;
-    style.height = Val::Px(32.0);
+    style.height = Val::Px(14.0);
     style.row_gap = Val::Px(8.0);
     style.column_gap = Val::Px(8.0);
     style
