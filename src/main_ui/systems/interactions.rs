@@ -1,5 +1,6 @@
+use bevy::input::keyboard::KeyboardInput;
 use bevy::prelude::*;
-use bevy_simple_text_input::TextInputSubmitEvent;
+use bevy_simple_text_input::{TextInputCursorPos, TextInputCursorTimer, TextInputInactive, TextInputSettings, TextInputSubmitEvent, TextInputValue};
 
 use crate::main_ui::components::{TerminalText, TerminalUser};
 use crate::resources::script_dispatch::{MessageMode, ScriptDispatch};
@@ -58,7 +59,7 @@ pub fn terminal_input(
 
                     for message in &expected_command.messages {
                         scripts.message_queue.push_back((
-                            ["\n", &username, "> ", &message.message].concat(),
+                            ["\n", &message.message].concat(),
                             message.mode,
                             Timer::from_seconds(message.delay, TimerMode::Once),
                         ));
@@ -81,7 +82,6 @@ pub fn send_message(
     mut text_query: Query<&mut Text, With<TerminalText>>,
 ) {
     if script_dispatch.message_queue.is_empty() {
-        println!("message queue is empty");
         return;
     }
 
@@ -90,10 +90,8 @@ pub fn send_message(
     }
 
     let Some(front) = script_dispatch.message_queue.pop_front() else { return };
-    println!("sending message: {}", front.0);
 
     if front.2.finished() {
-        println!("message finished");
         for mut terminal in &mut text_query {
             match terminal.sections.clone().last_mut() {
                 Some(last) => {
@@ -125,4 +123,63 @@ pub fn send_message(
     }
 
     script_dispatch.message_queue.push_front(front);
+}
+
+pub fn tab_complete(
+    mut events: EventReader<KeyboardInput>,
+    mut script_dispatch: ResMut<ScriptDispatch>,
+    mut text_input_query: Query<(
+        Entity,
+        &TextInputSettings,
+        &TextInputInactive,
+        &mut TextInputValue,
+        &mut TextInputCursorPos,
+        &mut TextInputCursorTimer,
+    )>,
+) {
+    if events.is_empty() {
+        return;
+    }
+
+    for (input_entity, settings, inactive, mut text_input, mut cursor_pos, mut cursor_timer) in
+        &mut text_input_query
+    {
+        if inactive.0 {
+            continue;
+        }
+
+        let Some(phase) = script_dispatch.phases.front_mut() else { return };
+        let Some(expected_command) = phase.commands.front() else { return };
+
+        for event in events.read() {
+            if !event.state.is_pressed() {
+                continue;
+            };
+
+            if event.key_code == KeyCode::Tab {
+
+                if let Some(last_char) = text_input.0.chars().last() {
+                    if last_char.is_whitespace() {
+                        return;
+                    }
+                }
+
+                let command_words = &expected_command.command.split_whitespace().collect::<Vec<&str>>();
+                let last_word = text_input.0.split_whitespace().last().unwrap_or("");
+
+                for word in command_words {
+                    if word.starts_with(last_word) {
+                        let mut new_text = text_input.0.split_whitespace().collect::<Vec<&str>>();
+                        new_text.pop();
+                        new_text.push(word);
+                        text_input.0 = new_text.join(" ");
+                        cursor_pos.0 = text_input.0.len();
+                        break;
+                    }
+                }
+
+
+            }
+        }
+    }
 }
