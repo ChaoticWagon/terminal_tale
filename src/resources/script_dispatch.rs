@@ -1,4 +1,4 @@
-use std::collections::VecDeque;
+use std::collections::{HashMap, VecDeque};
 use std::io;
 use std::path::Path;
 use std::time::Duration;
@@ -50,40 +50,30 @@ pub enum MessageMode {
 }
 
 impl ScriptDispatch {
-    pub(crate) fn new() -> io::Result<Self> {
+    pub(crate) fn new(script_dir: HashMap<&Path, &[u8]>) -> Self {
         // read yaml files in scripts/*
-        // get all filenames in scripts dir
-        let path = Path::new("scripts");
-
-        if !path.exists() {
-            return Err(io::Error::new(io::ErrorKind::NotFound, "scripts directory not found"));
-        }
+        // get all filenames in scripts directory
 
         let mut phases: VecDeque<Phase> = VecDeque::new();
+        
+        let order = vec![
+            "phase_1.yaml",
+            "phase_2.yaml",
+            "phase_3.yaml",
+        ];
 
-        for entry in path.read_dir()? {
-            let entry = entry?;
-            let f_type = entry.file_type()?;
-
-            if f_type.is_dir() {
-                continue;
-            }
-
-            let data = &std::fs::read_to_string(entry.path())?;
-            let phase = serde_yaml::from_str::<Phase>(data);
-            
-            if let Ok(phase) = phase {
-                phases.push_back(phase);
-            } else {
-                io::Error::new(io::ErrorKind::InvalidData, "Invalid data in script file");
-            }
+        for file in order {
+            let path = Path::new(file);
+            let data = script_dir.get(path).unwrap();
+            let phase: Phase = serde_yaml::from_slice(data).unwrap();
+            phases.push_back(phase);
         }
 
-        Ok(Self {
+        Self {
             phases,
             message_queue: VecDeque::new(),
             current_timer: Timer::new(Duration::from_secs(0), TimerMode::Once),
-        })
+        }
     }
 }
 // the ending of the story should not be a life lesson or a reflection, but an analogy, reflection, metaphor.
