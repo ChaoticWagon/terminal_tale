@@ -91,10 +91,3 @@ pub fn get_terminal_font(asset_server: &Res<AssetServer>) -> Handle<Font> {
 }
 
 pub const FONT_SIZE: f32 = 14.0;
-pub fn get_button_text_style(asset_server: &Res<AssetServer>) -> TextStyle {
-    TextStyle {
-        font: asset_server.load("fonts/1971-ibm-3278/3270-Regular.ttf"),
-        font_size: 32.0,
-        color: Color::WHITE
-    }
-}
