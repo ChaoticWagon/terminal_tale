@@ -1,0 +1,35 @@
+name: "Phase 3: Personal Reflection and Inspiration"
+commands:
+  - command: "login"
+    username: "nathan@~"
+    messages:
+  - command: "nano personal_reflection.txt"
+    username: "nathan@~"
+    messages:
+      - message: "# Personal Reflection on the WannaCry Malware Attack"
+        delay: 1.5
+        mode: "print"
+      - message: "The WannaCry malware attack was one of the most significant cyber events of our time. It spread rapidly across the globe, causing widespread disruption and panic. The ransomware encrypted countless systems, demanding ransom payments in Bitcoin to restore access to critical data."
+        delay: 1.0
+        mode: "print"
+      - message: "Amidst this chaos, a cybersecurity researcher named Marcus Hutchins, also known as MalwareTech, emerged as an unexpected hero. His quick thinking and deep understanding of malware led him to discover a 'kill switch' in the WannaCry code. By registering an unregistered domain, Marcus inadvertently halted the spread of the ransomware, saving potentially millions of systems from being compromised."
+        delay: 5.0
+        mode: "print"
+      - message: "Marcus's actions not only stopped the attack but also showcased the critical role that cybersecurity professionals play in protecting our digital world. His ability to reverse engineer the malware and identify its weaknesses was nothing short of remarkable."
+        delay: 5.0
+        mode: "print"
+      - message: "# Inspiration and Future Aspirations"
+        delay: 5.0
+        mode: "print"
+      - message: "Inspired by Marcus Hutchins's incredible story, I, Nathan Bonano, have decided to pursue a future in cybersecurity. This project, where I simulated the reverse engineering of the WannaCry malware, is proof of my exploration and growing passion for the computer science world."
+        delay: 1.2
+        mode: "print"
+      - message: "esc:wq"
+        delay: 0.1
+        mode: "print"
+  - command: "logout"
+    username: ""
+    messages:
+      - message: "# Logging out of the system."
+        delay: 0.1
+        mode: "print"

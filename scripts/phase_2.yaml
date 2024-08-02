@@ -1,0 +1,509 @@
+name: "Phase 2: Reverse Engineering/WannaCry Analysis"
+commands:
+  - command: "login"
+    username: "marcus@~"
+    messages:
+  - command: "mkdir ~/reverse_engineering/wannacry"
+    username: "marcus@~"
+    messages:
+      - message: "# Creating a working directory for the WannaCry analysis."
+        delay: 0.1
+        mode: "print"
+  - command: "cd ~/reverse_engineering/wannacry"
+    username: "marcus@~/reverse_engineering"
+    messages:
+      - message: "# Navigating into the newly created working directory."
+        delay: 0.1
+        mode: "print"
+  - command: "sudo apt-get update"
+    username: "marcus@~/reverse_engineering/wannacry"
+    messages:
+      - message: "# Updating package lists for Ubuntu repositories."
+        delay: 0.1
+        mode: "print"
+      - message: "Get:1 http://security.ubuntu.com/ubuntu focal-security InRelease [114 kB]"
+        delay: 2.0
+        mode: "print"
+      - message: "Hit:2 http://archive.ubuntu.com/ubuntu focal InRelease"
+        delay: 0.5
+        mode: "print"
+      - message: "Get:3 http://archive.ubuntu.com/ubuntu focal-updates InRelease [114 kB]"
+        delay: 1.0
+        mode: "print"
+      - message: "Get:4 http://archive.ubuntu.com/ubuntu focal-backports InRelease [108 kB]"
+        delay: 1.2
+        mode: "print"
+      - message: "Get:5 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 Packages [1,128 kB]"
+        delay: 1.3
+        mode: "print"
+      - message: "Get:6 http://archive.ubuntu.com/ubuntu focal-updates/universe amd64 Packages [878 kB]"
+        delay: 1.4
+        mode: "print"
+      - message: "Get:7 http://archive.ubuntu.com/ubuntu focal-updates/multiverse amd64 Packages [21.7 kB]"
+        delay: 0.9
+        mode: "print"
+      - message: "Get:8 http://archive.ubuntu.com/ubuntu focal-updates/restricted amd64 Packages [378 kB]"
+        delay: 1.1
+        mode: "print"
+      - message: "Fetched 2,741 kB in 3s (1,015 kB/s)"
+        delay: 0.3
+        mode: "print"
+      - message: "Reading package lists... Done"
+        delay: 0.4
+        mode: "print"
+  - command: "sudo apt-get install -y openssl gcc python3 tcpdump"
+    username: "marcus@~/reverse_engineering/wannacry"
+    messages:
+      - message: "# Installing necessary tools: OpenSSL for encryption, GCC for compiling code, Python3 for scripting, and tcpdump for network monitoring."
+        delay: 0.2
+        mode: "print"
+      - message: "Reading package lists... Done"
+        delay: 0.4
+        mode: "print"
+      - message: "Building dependency tree"
+        delay: 0.6
+        mode: "print"
+      - message: "Reading state information... Done"
+        delay: 0.5
+        mode: "print"
+      - message: "The following additional packages will be installed:"
+        delay: 0.5
+        mode: "print"
+      - message: "  libpython3-dev libpython3.8-dev python3-dev python3.8-dev"
+        delay: 0.5
+        mode: "print"
+      - message: "0 upgraded, 4 newly installed, 0 to remove and 0 not upgraded."
+        delay: 0.5
+        mode: "print"
+      - message: "Need to get 52.7 MB of archives."
+        delay: 0.4
+        mode: "print"
+      - message: "After this operation, 94.6 MB of additional disk space will be used."
+        delay: 0.5
+        mode: "print"
+      - message: "Get:1 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libpython3.8-dev amd64 3.8.10-0ubuntu1~20.04.6 [3,908 kB]"
+        delay: 1.0
+        mode: "print"
+      - message: "Get:2 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 python3.8-dev amd64 3.8.10-0ubuntu1~20.04.6 [535 kB]"
+        delay: 1.0
+        mode: "print"
+      - message: "Get:3 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libpython3-dev amd64 3.8.10-0ubuntu1~20.04.6 [8,714 B]"
+        delay: 1.0
+        mode: "print"
+      - message: "Get:4 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 python3-dev amd64 3.8.2-0ubuntu2 [1,256 B]"
+        delay: 1.0
+        mode: "print"
+      - message: "Fetched 52.7 MB in 3s (17.6 MB/s)"
+        delay: 0.3
+        mode: "print"
+      - message: "Selecting previously unselected package libpython3.8-dev:amd64."
+        delay: 0.5
+        mode: "print"
+      - message: "(Reading database ... 249044 files and directories currently installed.)"
+        delay: 0.5
+        mode: "print"
+      - message: "Preparing to unpack .../libpython3.8-dev_3.8.10-0ubuntu1~20.04.6_amd64.deb ..."
+        delay: 0.5
+        mode: "print"
+      - message: "Unpacking libpython3.8-dev:amd64 (3.8.10-0ubuntu1~20.04.6) ..."
+        delay: 0.5
+        mode: "print"
+      - message: "Selecting previously unselected package python3.8-dev."
+        delay: 0.5
+        mode: "print"
+      - message: "Preparing to unpack .../python3.8-dev_3.8.10-0ubuntu1~20.04.6_amd64.deb ..."
+        delay: 0.5
+        mode: "print"
+      - message: "Unpacking python3.8-dev (3.8.10-0ubuntu1~20.04.6) ..."
+        delay: 0.5
+        mode: "print"
+      - message: "Selecting previously unselected package libpython3-dev:amd64."
+        delay: 0.5
+        mode: "print"
+      - message: "Preparing to unpack .../libpython3-dev_3.8.10-0ubuntu1~20.04.6_amd64.deb ..."
+        delay: 0.5
+        mode: "print"
+      - message: "Unpacking libpython3-dev:amd64 (3.8.10-0ubuntu1~20.04.6) ..."
+        delay: 0.5
+        mode: "print"
+      - message: "Selecting previously unselected package python3-dev."
+        delay: 0.5
+        mode: "print"
+      - message: "Preparing to unpack .../python3-dev_3.8.2-0ubuntu2_amd64.deb ..."
+        delay: 0.5
+        mode: "print"
+      - message: "Unpacking python3-dev (3.8.2-0ubuntu2) ..."
+        delay: 0.5
+        mode: "print"
+      - message: "Setting up libpython3.8-dev:amd64 (3.8.10-0ubuntu1~20.04.6) ..."
+        delay: 0.5
+        mode: "print"
+      - message: "Setting up python3.8-dev (3.8.10-0ubuntu1~20.04.6) ..."
+        delay: 0.5
+        mode: "print"
+      - message: "Setting up libpython3-dev:amd64 (3.8.10-0ubuntu1~20.04.6) ..."
+        delay: 0.5
+        mode: "print"
+      - message: "Setting up python3-dev (3.8.2-0ubuntu2) ..."
+        delay: 0.5
+        mode: "print"
+      - message: "Processing triggers for man-db (2.9.1-1) ..."
+        delay: 0.5
+        mode: "print"
+      - message: "Processing triggers for install-info (6.7.0.dfsg.2-5) ..."
+        delay: 0.5
+        mode: "print"
+      - message: "Processing triggers for libc-bin (2.31-0ubuntu9.9) ..."
+        delay: 0.5
+        mode: "print"
+      - message: "Processing triggers for libgdk-pixbuf2.0-0:amd64 (2.40.0+dfsg-3ubuntu0.1) ..."
+        delay: 0.5
+        mode: "print"
+      - message: "Processing triggers for hicolor-icon-theme (0.17-2) ..."
+        delay: 0.5
+        mode: "print"
+      - message: "Processing triggers for shared-mime-info (1.15-1) ..."
+        delay: 0.5
+        mode: "print"
+      - message: "Processing triggers for mime-support (3.64ubuntu1) ..."
+        delay: 0.5
+        mode: "print"
+      - message: "Processing triggers for gnome-menus (3.36.0-1ubuntu1) ..."
+        delay: 0.5
+        mode: "print"
+      - message: "Processing triggers for desktop-file-utils (0.24-1ubuntu3) ..."
+        delay: 0.5
+        mode: "print"
+  - command: "python3 -m venv venv"
+    username: "marcus@~/reverse_engineering/wannacry"
+    messages:
+      - message: "# Creating a Python virtual environment to isolate dependencies."
+        delay: 0.1
+        mode: "print"
+  - command: "source venv/bin/activate"
+    username: "marcus@~/reverse_engineering/wannacry"
+    messages:
+      - message: "# Activating the virtual environment."
+        delay: 0.1
+        mode: "print"
+  - command: "pip install pycrypto"
+    username: "marcus@~/reverse_engineering/wannacry"
+    messages:
+      - message: "# Installing the pycrypto library, which provides cryptographic functions for analysis."
+        delay: 0.1
+        mode: "print"
+      - message: "Collecting pycrypto"
+        delay: 0.5
+        mode: "print"
+      - message: "  Downloading pycrypto-2.6.1.tar.gz (446 kB)"
+        delay: 1.0
+        mode: "print"
+      - message: "Building wheels for collected packages: pycrypto"
+        delay: 0.5
+        mode: "print"
+      - message: "  Building wheel for pycrypto (setup.py) … done"
+        delay: 1.0
+        mode: "print"
+      - message: "  Created wheel for pycrypto: filename=pycrypto-2.6.1-cp38-cp38-linux_x86_64.whl size=136225 sha256=…"
+        delay: 0.5
+        mode: "print"
+      - message: "  Stored in directory: /home/marcus/.cache/pip/wheels/…"
+        delay: 0.5
+        mode: "print"
+      - message: "Successfully built pycrypto"
+        delay: 0.5
+        mode: "print"
+      - message: "Installing collected packages: pycrypto"
+        delay: 0.5
+        mode: "print"
+      - message: "Successfully installed pycrypto-2.6.1"
+        delay: 0.5
+        mode: "print"
+  - command: "wget http://malware-samples.com/wannacry_sample"
+    username: "marcus@~/reverse_engineering/wannacry"
+    messages:
+      - message: "# Downloading the WannaCry malware sample."
+        delay: 0.1
+        mode: "print"
+      - message: "Resolving malware-samples.com (malware-samples.com)... 93.184.216.34"
+        delay: 0.7
+        mode: "print"
+      - message: "Connecting to malware-samples.com (malware-samples.com)|93.184.216.34|:80... connected."
+        delay: 0.6
+        mode: "print"
+      - message: "HTTP request sent, awaiting response... 200 OK"
+        delay: 0.8
+        mode: "print"
+      - message: "Length: 51324 (50K) [application/octet-stream]"
+        delay: 0.7
+        mode: "print"
+      - message: "Saving to: ‘wannacry_sample’"
+        delay: 0.5
+        mode: "print"
+      - message: "wannacry_sample        100%[===================>]  50.12K  --.-KB/s    in 0.1s"
+        delay: 0.7
+        mode: "print"
+      - message: "2023-08-01 12:45:38 (501 KB/s) - ‘wannacry_sample’ saved [51324/51324]"
+        delay: 0.6
+        mode: "print"
+  - command: "ls -lh wannacry_sample"
+    username: "marcus@~/reverse_engineering/wannacry"
+    messages:
+      - message: "# Verifying the downloaded malware sample."
+        delay: 0.1
+        mode: "print"
+      - message: "-rw-r--r-- 1 marcus marcus 50K Aug  1 12:45 wannacry_sample"
+        delay: 0.5
+        mode: "print"
+  - command: "tcpdump -i eth0 -w network_traffic.pcap"
+    username: "marcus@~/reverse_engineering/wannacry"
+    messages:
+      - message: "# Starting a network capture to monitor the malware's network activity."
+        delay: 0.1
+        mode: "print"
+      - message: "tcpdump: listening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes"
+        delay: 0.5
+        mode: "print"
+  - command: "python3 wannacry_sample"
+    username: "marcus@~/reverse_engineering/wannacry"
+    messages:
+      - message: "# Running the malware sample in a controlled environment."
+        delay: 0.1
+        mode: "print"
+      - message: "[*] WannaCry Ransomware Sample Executed"
+        delay: 0.5
+        mode: "print"
+      - message: "[*] Encrypting files..."
+        delay: 0.7
+        mode: "print"
+      - message: "[*] Connecting to IP addresses on port 445..."
+        delay: 0.6
+        mode: "print"
+      - message: "[*] Dropping ransom note..."
+        delay: 0.5
+        mode: "print"
+  - command: "tcpdump -i eth0 -c 100"
+    username: "marcus@~/reverse_engineering/wannacry"
+    messages:
+      - message: "# Capturing the first 100 packets to analyze the network activity."
+        delay: 0.1
+        mode: "print"
+      - message: "tcpdump: listening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes"
+        delay: 0.5
+        mode: "print"
+      - message: "100 packets captured"
+        delay: 1.0
+        mode: "print"
+      - message: "100 packets received by filter"
+        delay: 0.5
+        mode: "print"
+      - message: "0 packets dropped by kernel"
+        delay: 0.5
+        mode: "print"
+  - command: "tcpdump -r network_traffic.pcap"
+    username: "marcus@~/reverse_engineering/wannacry"
+    messages:
+      - message: "# Reading the captured network traffic to identify any suspicious activity."
+        delay: 0.1
+        mode: "print"
+      - message: "Reading from file network_traffic.pcap, link-type EN10MB (Ethernet)"
+        delay: 0.5
+        mode: "print"
+      - message: "12:45:38.123456 IP 192.168.1.2.445 > 192.168.1.3.139: Flags [S], seq 1234567890, win 8192, options [mss 1460], length 0"
+        delay: 0.5
+        mode: "print"
+      - message: "12:45:38.123457 IP 192.168.1.3.139 > 192.168.1.2.445: Flags [S.], seq 987654321, ack 1234567891, win 8192, options [mss 1460], length 0"
+        delay: 0.5
+        mode: "print"
+      - message: "..."
+        delay: 0.5
+        mode: "print"
+  - command: "whois iuqerfsodp9ifjaposdfjhgosurijfaewrwergwea.com"
+    username: "marcus@~/reverse_engineering/wannacry"
+    messages:
+      - message: "# Checking if the domain queried by the malware is registered."
+        delay: 0.1
+        mode: "print"
+      - message: "No match for domain \"iuqerfsodp9ifjaposdfjhgosurijfaewrwergwea.com\"."
+        delay: 1.0
+        mode: "print"
+  - command: "echo 'iuqerfsodp9ifjaposdfjhgosurijfaewrwergwea.com' > unregistered_domain.txt"
+    username: "marcus@~/reverse_engineering/wannacry"
+    messages:
+      - message: "# Saving the unregistered domain to a file for further use."
+        delay: 0.1
+        mode: "print"
+  - command: "nslookup iuqerfsodp9ifjaposdfjhgosurijfaewrwergwea.com"
+    username: "marcus@~/reverse_engineering/wannacry"
+    messages:
+      - message: "# Checking the DNS resolution for the unregistered domain."
+        delay: 0.1
+        mode: "print"
+      - message: "Server:         192.168.1.1"
+        delay: 0.5
+        mode: "print"
+      - message: "Address:        192.168.1.1#53"
+        delay: 0.5
+        mode: "print"
+      - message: "** server can't find iuqerfsodp9ifjaposdfjhgosurijfaewrwergwea.com: NXDOMAIN"
+        delay: 0.8
+        mode: "print"
+  - command: "echo '127.0.0.1 iuqerfsodp9ifjaposdfjhgosurijfaewrwergwea.com' | sudo tee -a /etc/hosts"
+    username: "marcus@~/reverse_engineering/wannacry"
+    messages:
+      - message: "# Adding the domain to the hosts file to simulate its registration."
+        delay: 0.1
+        mode: "print"
+      - message: "127.0.0.1 iuqerfsodp9ifjaposdfjhgosurijfaewrwergwea.com"
+        delay: 0.5
+        mode: "print"
+  - command: "ping iuqerfsodp9ifjaposdfjhgosurijfaewrwergwea.com"
+    username: "marcus@~/reverse_engineering/wannacry"
+    messages:
+      - message: "# Verifying that the domain now resolves to the local machine."
+        delay: 0.1
+        mode: "print"
+      - message: "PING iuqerfsodp9ifjaposdfjhgosurijfaewrwergwea.com (127.0.0.1) 56(84) bytes of data."
+        delay: 0.5
+        mode: "print"
+      - message: "64 bytes from localhost (127.0.0.1): icmp_seq=1 ttl=64 time=0.029 ms"
+        delay: 0.5
+        mode: "print"
+      - message: "64 bytes from localhost (127.0.0.1): icmp_seq=2 ttl=64 time=0.031 ms"
+        delay: 0.5
+        mode: "print"
+  - command: "python3 wannacry_sample"
+    username: "marcus@~/reverse_engineering/wannacry"
+    messages:
+      - message: "# Running the malware sample again to observe its behavior after registering the domain."
+        delay: 0.1
+        mode: "print"
+      - message: "[*] WannaCry Ransomware Sample Executed"
+        delay: 0.5
+        mode: "print"
+      - message: "[*] Querying iuqerfsodp9ifjaposdfjhgosurijfaewrwergwea.com..."
+        delay: 0.7
+        mode: "print"
+      - message: "[*] Domain exists, exiting..."
+        delay: 0.5
+        mode: "print"
+  - command: "sudo sed -i '/iuqerfsodp9ifjaposdfjhgosurijfaewrwergwea.com/d' /etc/hosts"
+    username: "marcus@~/reverse_engineering/wannacry"
+    messages:
+      - message: "# Removing the domain entry from the hosts file."
+        delay: 0.1
+        mode: "print"
+  - command: "python3 wannacry_sample"
+    username: "marcus@~/reverse_engineering/wannacry"
+    messages:
+      - message: "# Running the malware sample again with the domain entry removed to observe its behavior."
+        delay: 0.1
+        mode: "print"
+      - message: "[*] WannaCry Ransomware Sample Executed"
+        delay: 0.5
+        mode: "print"
+      - message: "[*] Querying iuqerfsodp9ifjaposdfjhgosurijfaewrwergwea.com..."
+        delay: 0.7
+        mode: "print"
+      - message: "[*] Domain does not exist, continuing with ransomware execution..."
+        delay: 0.5
+        mode: "print"
+      - message: "[*] Encrypting files..."
+        delay: 0.7
+        mode: "print"
+      - message: "[*] Connecting to IP addresses on port 445..."
+        delay: 0.6
+        mode: "print"
+      - message: "[*] Dropping ransom note..."
+        delay: 0.5
+        mode: "print"
+  - command: "whois iuqerfsodp9ifjaposdfjhgosurijfaewrwergwea.com"
+    username: "marcus@~/reverse_engineering/wannacry"
+    messages:
+      - message: "# Checking if the domain queried by the malware is registered globally."
+        delay: 0.1
+        mode: "print"
+      - message: "No match for domain \"iuqerfsodp9ifjaposdfjhgosurijfaewrwergwea.com\"."
+        delay: 1.0
+        mode: "print"
+  - command: "curl -X POST -d 'domain=iuqerfsodp9ifjaposdfjhgosurijfaewrwergwea.com&action=register' https://domain-registration-api.example.com"
+    username: "marcus@~/reverse_engineering/wannacry"
+    messages:
+      - message: "# Using a domain registration API to register the kill switch domain."
+        delay: 0.1
+        mode: "print"
+      - message: "{ \"status\": \"success\", \"message\": \"Domain registered successfully.\" }"
+        delay: 1.0
+        mode: "print"
+  - command: "nslookup iuqerfsodp9ifjaposdfjhgosurijfaewrwergwea.com"
+    username: "marcus@~/reverse_engineering/wannacry"
+    messages:
+      - message: "# Verifying that the domain is now registered globally."
+        delay: 0.1
+        mode: "print"
+      - message: "Server:         8.8.8.8"
+        delay: 0.5
+        mode: "print"
+      - message: "Address:        8.8.8.8#53"
+        delay: 0.5
+        mode: "print"
+      - message: "Non-authoritative answer:"
+        delay: 0.5
+        mode: "print"
+      - message: "Name:   iuqerfsodp9ifjaposdfjhgosurijfaewrwergwea.com"
+        delay: 0.5
+        mode: "print"
+      - message: "Address: 93.184.216.34"
+        delay: 0.8
+        mode: "print"
+  - command: "nano summary.txt"
+    username: "marcus@~/reverse_engineering/wannacry"
+    messages:
+      - message: "# Creating a summary text file to recap the reverse engineering process."
+        delay: 0.1
+        mode: "print"
+      - message: "i"
+        delay: 0.1
+        mode: "print"
+      - message: "# Summary of Reverse Engineering WannaCry"
+        delay: 0.5
+        mode: "print"
+      - message: "1. Set up the environment by creating a working directory and installing necessary tools."
+        delay: 0.5
+        mode: "print"
+      - message: "2. Downloaded a sample of the WannaCry malware for analysis."
+        delay: 0.5
+        mode: "print"
+      - message: "3. Ran the malware sample in a controlled environment and monitored its network activity."
+        delay: 0.5
+        mode: "print"
+      - message: "4. Identified that the malware queried an unregistered domain as a kill switch."
+        delay: 0.5
+        mode: "print"
+      - message: "5. Registered the kill switch domain locally to observe the malware's behavior."
+        delay: 0.5
+        mode: "print"
+      - message: "6. Verified that registering the domain stopped the malware from executing."
+        delay: 0.5
+        mode: "print"
+      - message: "7. Registered the domain globally to prevent further spread of WannaCry."
+        delay: 0.5
+        mode: "print"
+      - message: "# The registration of the domain iuqerfsodp9ifjaposdfjhgosurijfaewrwergwea.com has effectively stopped all further spread of the WannaCry ransomware."
+        delay: 0.5
+        mode: "print"
+      - message: "# This kill switch mechanism prevented new infections and halted the ransomware attack."
+        delay: 0.5
+        mode: "print"
+      - message: "# The rapid response and registration of this domain have been crucial in mitigating the impact of the attack."
+        delay: 0.5
+        mode: "print"
+      - message: "esc:wq"
+        delay: 0.1
+        mode: "print"
+  - command: "logout"
+    username: ""
+    messages:
+      - message: "# Logging out of the system."
+        delay: 0.1
+        mode: "print"
