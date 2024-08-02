@@ -88,7 +88,7 @@ pub fn build_main_ui(commands: &mut Commands, asset_server: &Res<AssetServer>) -
                         text: Text {
                             sections: vec![
                                 TextSection::new("Type: ", get_prompt_text_style(asset_server)),
-                                TextSection::new("cd ~/projects (Use tab to complete words you started)", get_command_text_style(asset_server)),
+                                TextSection::new("mkdir ~/projects/wannacry (Use tab to complete words you started)", get_command_text_style(asset_server)),
                             ],
                             justify: JustifyText::Left,
                             linebreak_behavior: BreakLineOn::WordBoundary,
