@@ -1,5 +1,22 @@
 # Terminal Story
 
+A simple terminal emulator to create interactive stories. Created for ENGL 15 @ PSU summer 2024
+
+## How to Use
+
+Add a yaml file to `src/scripts` with the following format:
+
+```yaml
+name: "Part 1" # doesn't matter
+commands: 
+  - command: "pwd" # command to be entered
+    username: "bob@~" # modification to username or directory
+    messages: # list of messages to be printed
+      - message: "/home/bob" # message to be printed
+        delay: 0.1 # delay before printing message
+        mode: "print" # "replace" to replace the previous message
+```
+
 ## Description
 
 This is an interactive story told through a terminal window. The user will explore the story by entering terminal commands guided by the program.
